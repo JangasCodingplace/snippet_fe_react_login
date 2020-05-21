@@ -1,1 +1,1 @@
-# snippet_fe_react_login
+# snippet_fe_react_blank
