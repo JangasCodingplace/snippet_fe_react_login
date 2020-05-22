@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
+
+/* IMPORT Actions */
+import { logout } from '../../actions/authentication';
+/* ./IMPORT Actions */
+
+/* IMPORT Helper-Components */
+import { getCookieValueByName } from '../../components/toolbox';
+/* */
+
 
 /* IMPORT UI-Components */
 import AppBar from '@material-ui/core/AppBar';
@@ -8,20 +18,36 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 /* */
 
-
-/* IMPORT Helper-Components */
-
-/* */
-
 class Navbar extends Component{
   constructor(props) {
     super(props);
   }
+  logout = () => {
+    const basic_url = 'http://127.0.0.1:8000/';
+    const auth_url = basic_url + 'user/auth/logout'
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookieValueByName('csrftoken')
+      },
+      withCredentials: true,
+    };
+
+    axios.post(auth_url, {}, config)
+    .then((res) => {
+      this.props.logout()
+    })
+    .catch((err) => {
+
+    })
+  }
+
   getMenuTabs = () => {
+    if (this.props.user.auth_token === '') return;
     return (
       <>
-        <Button color="inherit">Tab 1</Button>
-        <Button color="inherit">Tab 2</Button>
+        <Button color="inherit" onClick={this.logout}>Logout</Button>
       </>
     )
   }
@@ -42,10 +68,14 @@ class Navbar extends Component{
 }
 
 let mapStateToProps = (state) => {
-  return {}
+  return {
+    user:state.user
+  }
 }
 
-let mapDispatchToProps = {}
+let mapDispatchToProps = {
+  logout:logout
+}
 
 let NavbarContainer = connect(mapStateToProps,mapDispatchToProps)(Navbar);
 

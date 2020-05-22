@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 /* IMPORT UI-Components */
-
+import Container from '@material-ui/core/Container';
 /* */
 
 
@@ -20,7 +20,9 @@ class PageWrapper extends Component{
       <>
         <Navbar/>
           <div style={{marginTop:20,minHeight:'80vh'}}>
-            {this.props.children}
+            <Container maxWidth="md">
+              {this.props.children}
+            </Container>
           </div>
         <Footer/>
       </>
