@@ -17,6 +17,7 @@ import PageWrapper from './components/PageWrapper/PageWrapper';
 
 /* Pages */
 import Auth from './pages/auth/Auth';
+import Dashboard from './pages/dashboard/Dashboard';
 /* ./Pages */
 
 class App extends Component{
@@ -48,10 +49,17 @@ class App extends Component{
   }
 
   render(){
+    if (this.props.user.auth_token===""){
+      return (
+        <PageWrapper>
+          <Auth/>
+        </PageWrapper>
+      );
+    }
     console.log(this.props.user)
     return (
       <PageWrapper>
-        <Auth/>
+        <Dashboard/>
       </PageWrapper>
     );
   }
