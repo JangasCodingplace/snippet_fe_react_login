@@ -16,11 +16,21 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import PersonIcon from '@material-ui/icons/Person';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 /* */
 
 class Navbar extends Component{
   constructor(props) {
     super(props);
+    this.state = {
+      anchorEl:null
+    }
   }
   logout = () => {
     const basic_url = 'http://127.0.0.1:8000/';
@@ -43,11 +53,51 @@ class Navbar extends Component{
     })
   }
 
+  handleClick = (event) => {
+    this.setState({
+      anchorEl:event.currentTarget
+    })
+  };
+
+  handleClose = () => {
+    this.setState({
+      anchorEl:null
+    })
+  };
+
   getMenuTabs = () => {
     if (this.props.user.auth_token === '') return;
+    let { anchorEl } = { ...this.state };
     return (
       <>
-        <Button color="inherit" onClick={this.logout}>Logout</Button>
+        <Button
+          aria-controls="customized-menu"
+          aria-haspopup="true"
+          color="inherit"
+          onClick={this.handleClick}
+        >
+          Profile
+        </Button>
+        <Menu
+           id="customized-menu"
+           anchorEl={anchorEl}
+           keepMounted
+           open={Boolean(anchorEl)}
+           onClose={this.handleClose}
+         >
+           <MenuItem>
+             <ListItemIcon>
+               <PersonIcon fontSize="small" />
+             </ListItemIcon>
+             <ListItemText primary="Edit Profile" />
+           </MenuItem>
+           <MenuItem onClick={this.logout}>
+             <ListItemIcon>
+               <ExitToAppIcon fontSize="small" />
+             </ListItemIcon>
+             <ListItemText primary="Logout" />
+           </MenuItem>
+         </Menu>
       </>
     )
   }
