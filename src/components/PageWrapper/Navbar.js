@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -22,14 +23,27 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
+import Link from '@material-ui/core/Link';
 /* */
+
 
 class Navbar extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      anchorEl:null
+      anchorEl:null,
+      navbarLinks:{
+        profile:(
+          <Link
+            to="/profile"
+            underline="none"
+            color="inherit"
+            component={RouterLink}
+          >
+            Edit Profile
+          </Link>
+        ),
+      }
     }
   }
   logout = () => {
@@ -65,9 +79,11 @@ class Navbar extends Component{
     })
   };
 
+
   getMenuTabs = () => {
     if (this.props.user.auth_token === '') return;
-    let { anchorEl } = { ...this.state };
+    let { anchorEl, navbarLinks } = { ...this.state };
+
     return (
       <>
         <Button
@@ -86,10 +102,10 @@ class Navbar extends Component{
            onClose={this.handleClose}
          >
            <MenuItem>
-             <ListItemIcon>
-               <PersonIcon fontSize="small" />
-             </ListItemIcon>
-             <ListItemText primary="Edit Profile" />
+            <ListItemIcon>
+              <PersonIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary={navbarLinks.profile} onClick={this.handleClose}/>
            </MenuItem>
            <MenuItem onClick={this.logout}>
              <ListItemIcon>
@@ -107,7 +123,9 @@ class Navbar extends Component{
         <AppBar position="static">
           <Toolbar>
             <Typography style={{flexGrow: 1}} variant="h6">
-              Basic Template
+              <Link to="/" underline="none" color="inherit" component={RouterLink}>
+                Basic Template
+              </Link>
             </Typography>
             {this.getMenuTabs()}
           </Toolbar>

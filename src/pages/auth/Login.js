@@ -28,9 +28,10 @@ class Login extends Component{
       },
       formHelperTexts : {
         email:{helperText:"",error:false},
-        password:{helperText:"",error:false}
+        password:{helperText:"",error:false},
       },
-      formIsValid:true
+      formIsValid:true,
+      invalidMailOrPassword:false
     }
   }
 
@@ -60,7 +61,9 @@ class Login extends Component{
       this.props.authenticateUser(res.data.user)
     })
     .catch((err) => {
-
+      this.setState({
+        invalidMailOrPassword:true
+      })
     })
   }
 
@@ -95,6 +98,13 @@ class Login extends Component{
     })
   }
 
+  getErrorMessage = () => {
+    if (!this.state.invalidMailOrPassword) return;
+    return (
+      <Typography color="error">Invalid Mail or Password.</Typography>
+    )
+  }
+
 
   render(){
     return(
@@ -112,6 +122,8 @@ class Login extends Component{
             create an Account
           </Link>
         </small>
+
+        {this.getErrorMessage()}
 
 
         <TextField

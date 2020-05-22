@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { initialState } from './reducers/user';
 import axios from 'axios';
 
@@ -18,13 +19,10 @@ import PageWrapper from './components/PageWrapper/PageWrapper';
 /* Pages */
 import Auth from './pages/auth/Auth';
 import Dashboard from './pages/dashboard/Dashboard';
+import Profile from './pages/profile/Profile';
 /* ./Pages */
 
 class App extends Component{
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount(){
     if (this.props.user === initialState){
       const basic_url = 'http://127.0.0.1:8000/';
@@ -49,18 +47,31 @@ class App extends Component{
   }
 
   render(){
-    if (this.props.user.auth_token===""){
+    if (
+      this.props.user===initialState &&
+      window.localStorage.getItem('auth_token')!==null
+    ){
+      return (<></>);
+    }
+    if (
+      this.props.user === initialState &&
+      window.localStorage.getItem('auth_token')===null
+    ){
       return (
-        <PageWrapper>
-          <Auth/>
-        </PageWrapper>
+        <Router>
+          <PageWrapper>
+            <Auth/>
+          </PageWrapper>
+        </Router>
       );
     }
-    console.log(this.props.user)
     return (
-      <PageWrapper>
-        <Dashboard/>
-      </PageWrapper>
+      <Router>
+        <PageWrapper>
+          <Route path="/" exact component={Dashboard} />
+          <Route path="/profile" component={Profile} />
+        </PageWrapper>
+      </Router>
     );
   }
 }

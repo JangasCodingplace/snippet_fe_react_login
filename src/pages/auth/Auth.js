@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 
 import Login from './Login';
 import Registration from './Registration';
